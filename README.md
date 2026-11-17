@@ -26,15 +26,16 @@
 - 前端：浏览器直接打开，三维预览通过 CDN 加载 three.js 与 urdf-loader
 - 一台装有 SocketCAN 的 Linux 主机，每条臂一个 USB-CAN 适配器
 
-## 需要你自己提供的文件
+## 模型与配置（已包含）
 
-1. `piper_identified.urdf`（放在仓库根目录）：带辨识惯量参数的 PiPER URDF，用于重力补偿和逆动力学。
-   它来自另一个控制台工程，**没有放进本仓库**。我们使用的那份文件的 sha256 是
-   `10ae37c55b4f97dae9a01b95eef0c2602008cc82df0c239dda803ee979643253`（`/health` 接口也会返回它），可用来核对你拿到的是不是同一份。
-2. 三维预览用的 URDF 与网格（`piper_description_v100_adapter.urdf` + `meshes/`）和 `piper.json`（底座位姿、MIT 增益）：
-   通过环境变量指向你自己的工程：`PIPER_WORKSPACE`（默认 `~/piper-workspace`）、`PIPER_MODEL_DIR`、`PIPER_PROFILE`。
-3. USB-CAN 适配器序列号：在 `demo/backend/arms.py`（`ARMS`）和 `common.py`（`ARM_SERIAL`）里改成你自己的。
-   **CAN 口名（can0…）会在重启后重新排列，所以代码按序列号解析，不要改成按口名。**
+- `piper_identified.urdf`：带辨识惯量参数的 URDF，用于重力补偿和逆动力学（来自同事的控制台工程，许可见 [models/README.md](models/README.md)）。
+- `models/piper/`：三维预览用的 URDF 和 STL 网格（AgileX `piper_ros`，MIT 许可）。
+- `config/profile.json`：两臂底座位姿、MIT 增益等最小配置。可用环境变量改用别处的文件：`PIPER_MODEL_DIR`、`PIPER_PROFILE`、`PIPER_WORKSPACE`（找不到仓库内文件时的回退位置）。
+
+## 需要你自己改的
+
+USB-CAN 适配器序列号：在 `demo/backend/arms.py`（`ARMS`）和 `common.py`（`ARM_SERIAL`）里改成你自己的。
+**CAN 口名（can0…）会在重启后重新排列，所以代码按序列号解析，不要改成按口名。**
 
 ## 运行
 

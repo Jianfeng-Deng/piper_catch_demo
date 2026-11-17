@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<!-- Offline identified model; NOT validated for hardware deployment.
+     Source result: results/train2_test1_fixed_com_ridge100_friction10/result.json
+     ridge=100; friction_ridge=10; original SG acceleration retained.
+     COM positions and COM inertia crosses fixed to the source URDF.
+     Fitted mass, COM inertia and viscous damping exported at full precision.
+     Base inertia, geometry and kinematics preserved.
+     Hardware effort limits are fixed at 16 N.m and mesh paths are local.
+     Consumers must explicitly honor joint damping; rigid-body inverse dynamics
+     alone may not include viscous torque. No Coulomb friction was fitted.
+     Source URDF SHA256: b00137dc2f40b2dcc0e756b4d2ea74dc7f338e134233e3657e630e6944aab15b -->
+<robot name="piper">
+    <link name="world"/>
+    <joint name="world_to_base_link" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.00473641164191482 2.56829134630247E-05 0.041451518036016" rpy="0 0 0"/>
+            <mass value="1.02" />
+            <inertia ixx="0.00267433" ixy="-0.00000073" ixz="-0.00017389" iyy="0.00282612" iyz="0.0000004" izz="0.00089624"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/base_link.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/base_link.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <link name="link1">
+        <inertial>
+            <origin xyz="0.00032 -0.00041 -0.00348" rpy="0 0 0"/>
+            <mass value="0.7099998569040501"/>
+            <inertia ixx="0.00061118989063642327" ixy="7.8000000000000005e-07" ixz="6.2600000000000002e-06" iyy="0.00061121891176345918" iyz="4.6199999999999998e-06" izz="1.7540434678466965e-06"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link1.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link1.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint1" type="revolute">
+        <origin xyz="0 0 0.123" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="link1"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-2.6179938" upper="2.6179938" effort="16" velocity="5"/>
+        <dynamics damping="0.52816552182332177" friction="0"/>
+    </joint>
+    <link name="link2">
+        <inertial>
+            <origin xyz="0.21852 -0.00861 0.00126" rpy="0 0 0"/>
+            <mass value="1.1656172247944017"/>
+            <inertia ixx="0.0064419323167299088" ixy="0.0018291600000000002" ixz="0.00019233" iyy="0.020181432537577135" iyz="7.6699999999999977e-06" izz="0.02661948870157145"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link2.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link2.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint2" type="revolute">
+        <origin xyz="0 0 0" rpy="1.5707963 -0.1357866 -3.1415926"/>
+        <parent link="link1"/>
+        <child link="link2"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="0" upper="3.1415926" effort="16" velocity="5"/>
+        <dynamics damping="0.66671434672855601" friction="0"/>
+    </joint>
+    <link name="link3">
+        <inertial>
+            <origin xyz="-0.01999 -0.14808 -0.00053" rpy="0 0 0"/>
+            <mass value="0.42578160544335147"/>
+            <inertia ixx="0.00010668125928937379" ixy="0.00161034" ixz="6.5999999999999876e-07" iyy="0.025222676911467207" iyz="1.6200000000000082e-06" izz="0.025323547805207687"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link3.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link3.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint3" type="revolute">
+        <origin xyz="0.28503 0 0" rpy="0 0 -1.7938494"/>
+        <parent link="link2"/>
+        <child link="link3"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-2.9670597" upper="0" effort="16" velocity="5"/>
+        <dynamics damping="1.0903738205433466" friction="0"/>
+    </joint>
+    <link name="link4">
+        <inertial>
+            <origin xyz="0.00013 -0.00076 -0.00394" rpy="0 0 0"/>
+            <mass value="0.29182897026233401"/>
+            <inertia ixx="0.0023170431898893872" ixy="6.1999999999999999e-07" ixz="6.7000000000000004e-07" iyy="1.5352471133337744e-06" iyz="4.0799999999999999e-06" izz="0.0023163061722192165"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link4.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link4.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint4" type="revolute">
+        <origin xyz="-0.02198 -0.25075 0" rpy="1.5707963 0 0"/>
+        <parent link="link3"/>
+        <child link="link4"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-1.7453292" upper="1.7453292" effort="16" velocity="5"/>
+        <dynamics damping="0.05707120539778459" friction="0"/>
+    </joint>
+    <link name="link5">
+        <inertial>
+            <origin xyz="0.00018 -0.06104 -0.00227" rpy="0 0 0"/>
+            <mass value="0.80415214570592886"/>
+            <inertia ixx="0.0026342410715607355" ixy="2.5900000000000023e-06" ixz="9.9999999999999995e-08" iyy="0.0020758888337458945" iyz="9.9000000000000102e-06" izz="0.0014049947669063801"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link5.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link5.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint5" type="revolute">
+        <origin xyz="0 0 0" rpy="-1.5707963 0 0"/>
+        <parent link="link4"/>
+        <child link="link5"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-1.2217304" upper="1.2217304" effort="16" velocity="5"/>
+        <dynamics damping="0.059812140215301651" friction="0"/>
+    </joint>
+    <link name="link6">
+        <inertial>
+            <origin xyz="-0.00003 0.00006 -0.002" rpy="0 0 0"/>
+            <mass value="0.39501562114754962"/>
+            <inertia ixx="2.7233013169976599e-05" ixy="2.0200000000000001e-06" ixz="2.61e-06" iyy="0.0039441766073203465" iyz="2.0000000000000014e-08" izz="0.0039169459256709173"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/dae/link6.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/link6.stl"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint6" type="revolute">
+        <origin xyz="8.8259E-05 -0.091 0" rpy="1.5707963 0 0"/>
+        <parent link="link5"/>
+        <child link="link6"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-2.0943951" upper="2.0943951" effort="16" velocity="5"/>
+        <dynamics damping="0.039300732207935889" friction="0"/>
+    </joint>
+</robot>

@@ -33,8 +33,9 @@ from pydantic import BaseModel  # noqa: E402
 
 ALLOW_CONTROL = os.environ.get("DEMO_ALLOW_CONTROL", "0") == "1"
 WORKSPACE = Path(os.environ.get("PIPER_WORKSPACE", str(Path.home() / "piper-workspace"))).expanduser()
-MODEL_DIR = Path(os.environ.get("PIPER_MODEL_DIR", str(WORKSPACE / "public/model/piper")))
-PROFILE_PATH = Path(os.environ.get("PIPER_PROFILE", str(WORKSPACE / "configs/piper.json")))
+REPO_MODELS, REPO_PROFILE = ROOT.parent / "models" / "piper", ROOT.parent / "config" / "profile.json"
+MODEL_DIR = Path(os.environ.get("PIPER_MODEL_DIR") or (REPO_MODELS if REPO_MODELS.exists() else WORKSPACE / "public/model/piper"))
+PROFILE_PATH = Path(os.environ.get("PIPER_PROFILE") or (REPO_PROFILE if REPO_PROFILE.exists() else WORKSPACE / "configs/piper.json"))
 TOKEN = secrets.token_urlsafe(16)
 
 READERS = {n: ArmReader(n) for n in ARMS}

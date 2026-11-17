@@ -1,0 +1,99 @@
+{
+  "_note": "Minimal profile read by demo/backend/app.py: arm base poses in the world frame, nominal TCP, MIT gains, gripper effort. Values measured/used on the dual-PiPER bench described in docs/PROJECT_STATUS.md.",
+  "arms": {
+    "left": {
+      "base_xyz_m": [
+        -0.3027,
+        0.0,
+        0.0
+      ],
+      "base_rpy_deg": [
+        0,
+        0,
+        90
+      ]
+    },
+    "right": {
+      "base_xyz_m": [
+        0.3027,
+        0.0,
+        0.0
+      ],
+      "base_rpy_deg": [
+        0,
+        0,
+        90
+      ]
+    }
+  },
+  "tcp_xyz_m": [
+    0,
+    0,
+    0.13503
+  ],
+  "tcp_rpy_deg": [
+    0,
+    0,
+    0
+  ],
+  "control": {
+    "gripper_effort_raw": 3000
+  },
+  "mit": {
+    "hz": 200,
+    "axes": {
+      "left": {
+        "kp": [
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0
+        ],
+        "kd": [
+          0.8,
+          0.8,
+          0.8,
+          0.8,
+          0.8,
+          0.8
+        ],
+        "residual_wire": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "right": {
+        "kp": [
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0
+        ],
+        "kd": [
+          0.8,
+          0.8,
+          0.8,
+          0.8,
+          0.8,
+          0.8
+        ],
+        "residual_wire": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}
