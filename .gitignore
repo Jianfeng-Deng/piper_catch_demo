@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+# runtime / measured data (regenerate with the test scripts)
+data/
+# robot-specific files, not part of the code
+stow_pose.json
+# third-party model: copy it from your own console project, see README
+piper_identified.urdf

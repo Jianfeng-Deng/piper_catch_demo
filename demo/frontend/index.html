@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIPER 抛接 Demo</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+  "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+  "urdf-loader": "https://cdn.jsdelivr.net/npm/urdf-loader@0.12.2/src/URDFLoader.js"
+} }
+</script>
+</head>
+<body>
+<header class="topbar">
+  <h1>PIPER 抛接 Demo <span class="sub">MIT 监视 · 主从遥操</span></h1>
+  <div class="chips">
+    <span class="chip" id="chip-conn" data-s="warn"><i></i><b>连接中…</b></span>
+    <span class="chip" id="chip-ctl" data-s="ok"><i></i><b>只读</b></span>
+  </div>
+  <div class="actions">
+    <button id="btn-hold" class="hold" hidden title="立即停止所有运动并让两条从臂在当前位置保持（不失能）。快捷键 Esc">急停保持</button>
+    <button id="btn-estop" class="ghost" hidden title="发送固件快速急停。注意：恢复时需要重使能，臂可能失能下坠，仅在“急停保持”无效时使用">固件急停</button>
+    <button id="btn-theme" class="ghost" title="切换亮/暗主题">主题</button>
+  </div>
+</header>
+
+<main class="layout">
+  <div class="leftcol">
+    <section class="card view">
+      <div class="card-h">
+        <h2>URDF 预览</h2>
+        <div class="toggles">
+          <label><input type="checkbox" id="tg-ghost" checked> 主臂叠加（半透明）</label>
+          <label><input type="checkbox" id="tg-grid" checked> 网格</label>
+          <button id="btn-reset-cam" class="ghost">复位视角</button>
+        </div>
+      </div>
+      <div id="viewport"><div id="viewport-msg" class="msg">正在加载模型…</div><div id="viewport-banner" class="banner" hidden>离线仿真预览 · 不是真机实时姿态</div></div>
+      <div class="legend-row">
+        <span class="key solid"></span> 从臂（实测）
+        <span class="key ghost"></span> 主臂（实测，叠加在对应从臂底座上，仅用于对比姿态）
+      </div>
+    </section>
+
+    <section class="card pose" id="pose">
+      <div class="card-h"><h2>手动位姿预览</h2><span class="hint">拖动关节角在 URDF 里看姿态，不会控制真机</span></div>
+      <div class="th-controls">
+        <label class="sw"><input type="checkbox" id="mp-on"> 启用手动预览</label>
+        <span class="seg" id="mp-arm" role="tablist"><button data-arm="left" aria-selected="true">左臂</button><button data-arm="right" aria-selected="false">右臂</button></span>
+        <select id="mp-preset" aria-label="载入姿态"></select>
+        <button id="mp-load" class="sec">载入</button>
+      </div>
+      <div id="mp-rows" class="mp-rows"></div>
+      <div id="mp-readout"></div>
+      <ul id="mp-warn" class="checks"></ul>
+      <div class="th-controls">
+        <button id="mp-copy" class="primary">复制位姿描述</button>
+        <button id="mp-move" class="primary" title="让所选从臂以 10% 速度慢速移动到当前预览的姿态（MOVE J），带路径检查和停止条件">移动真机到此姿态（慢速）</button>
+        <span class="hint" id="mp-copied"></span>
+      </div>
+      <div id="mp-move-status"></div>
+      <textarea id="mp-text" class="mp-text" readonly rows="4" aria-label="位姿描述"></textarea>
+      <details class="mp-paste"><summary>从文本载入位姿（粘贴“左臂：J1=… 夹爪 … mm”这样的描述）</summary>
+        <textarea id="mp-paste" class="mp-text" rows="3" placeholder="左臂：J1=0.0° J2=28.6° J3=-57.3° J4=0.0° J5=28.6° J6=0.0°，夹爪 60 mm"></textarea>
+        <div class="th-controls"><button id="mp-parse" class="sec">载入文本到预览</button><span class="hint" id="mp-parse-msg"></span></div>
+      </details>
+    </section>
+
+    <section class="card throw" id="throw">
+      <div class="card-h"><h2>上抛预览（离线仿真）</h2><span class="hint">只在预览里播放，不会向机械臂发送任何指令</span></div>
+      <div class="th-controls">
+        <label>动作 <select id="th-preset"></select></label>
+        <label>瞄准角 J1 <input type="range" id="th-aim" min="-90" max="-10" step="1" value="-50"><b id="th-aim-v">-50°</b></label>
+        <label>接取高度 <input type="range" id="th-catch" min="0" max="0.95" step="0.05" value="0.75"><b id="th-catch-v">抛高的 75%</b></label>
+      </div>
+      <div class="th-controls">
+        <button id="th-play" class="primary">▶ 播放</button>
+        <button id="th-reset" class="sec">⟲ 复位</button>
+        <input type="range" id="th-time" min="0" max="1" step="0.01" value="0" aria-label="时间">
+        <b id="th-t">0.00 s</b>
+        <label>速度 <select id="th-rate"><option value="0.1">0.1×</option><option value="0.25" selected>0.25×</option><option value="0.5">0.5×</option><option value="1">1×</option></select></label>
+        <button id="th-exit" class="ghost">退出预览（回到实时）</button>
+      </div>
+      <div id="th-stats"></div>
+      <ul id="th-warn" class="checks"></ul>
+      <p class="note" id="th-assume"></p>
+    </section>
+
+    <section class="card mittest" id="mittest">
+      <div class="card-h"><h2>MIT 逐步测试（从臂）</h2><span class="hint" id="mittest-hint"></span></div>
+      <div class="row" id="mittest-fw"></div>
+      <div class="teleop-grid" id="mittest-grid"></div>
+    </section>
+
+    <section class="card teleop" id="teleop">
+      <div class="card-h"><h2>主从遥操（MIT）</h2><span class="hint" id="teleop-hint"></span></div>
+      <div class="teleop-grid" id="teleop-grid"></div>
+    </section>
+  </div>
+
+  <section class="card data">
+    <div class="card-h">
+      <h2>MIT 数据</h2>
+      <nav class="tabs" id="tabs" role="tablist"></nav>
+    </div>
+    <div id="arm-chips" class="chips wrap"></div>
+    <div class="tablewrap">
+      <table id="joint-table">
+        <thead><tr>
+          <th>关节</th><th>角度 °</th><th>速度 rad/s</th><th>电流 A</th><th>力矩反馈 N·m</th>
+          <th>重力预测 N·m</th><th>差值 N·m</th><th>电机温度 °C</th><th>驱动温度 °C</th><th>电压 V</th><th>使能</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="note" id="arm-note"></p>
+    <div class="charts" id="charts"></div>
+  </section>
+</main>
+
+<div id="tooltip" class="tooltip" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
